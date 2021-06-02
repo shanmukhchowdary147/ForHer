@@ -162,8 +162,7 @@ public class Register extends AppCompatActivity {
                                     if (task.isSuccessful())
                                     {
                                         Toast.makeText(Register.this, "Your Account has been Created", Toast.LENGTH_SHORT).show();
-                                        Intent intent=new Intent(Register.this,MainActivity.class);
-                                        intent.putExtra("MPHONE",phone);
+                                        Intent intent=new Intent(Register.this,Login.class);
                                         startActivity(intent);
                                         progressBar.setVisibility(View.GONE);
 

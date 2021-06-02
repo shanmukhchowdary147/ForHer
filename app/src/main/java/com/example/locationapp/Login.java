@@ -8,17 +8,21 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.locationapp.Model.Users;
+import com.example.locationapp.Prevalent.Prevalent;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import io.paperdb.Paper;
 
 public class Login extends AppCompatActivity {
     private static final String TAG ="shannu2" ;
@@ -26,6 +30,7 @@ public class Login extends AppCompatActivity {
     Button mLoginBtn,pol,mCreateBtn;
     TextView forgotTextLink;
     ProgressBar progressBar;
+    private CheckBox chkbox;
 
 
 
@@ -39,8 +44,20 @@ public class Login extends AppCompatActivity {
         pol = (Button)findViewById(R.id.pol_Log);
         mCreateBtn = (Button) findViewById(R.id.signin);
         InPhone =(EditText) findViewById(R.id.phone);
+        chkbox=(CheckBox) findViewById(R.id.checkBox);
 
         progressBar = findViewById(R.id.progressBar);
+
+        Paper.init(this);
+        String UserPhoneKey = Paper.book().read(Prevalent.UserPhoneKey);
+        String UserPasswordKey = Paper.book().read(Prevalent.UserPasswordKey);
+
+        if(UserPhoneKey !="" && UserPasswordKey!=""){
+            if(!TextUtils.isEmpty(UserPhoneKey) && !TextUtils.isEmpty(UserPasswordKey)){
+                AllowAccessToAcc(UserPhoneKey,UserPasswordKey);
+
+            }
+        }
 
         pol.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,6 +105,8 @@ public class Login extends AppCompatActivity {
     }
 
     private void AllowAccessToAcc(final String phone, final String password) {
+
+
         final DatabaseReference RootRef;
         RootRef= FirebaseDatabase.getInstance().getReference();
 
@@ -101,6 +120,10 @@ public class Login extends AppCompatActivity {
                     {
                         if (userData.getPassword().equals(password))
                         {
+                            if(chkbox.isChecked()){
+                                Paper.book().write(Prevalent.UserPhoneKey,phone);
+                                Paper.book().write(Prevalent.UserPasswordKey,password);
+                            }
                             Toast.makeText(Login.this, "Login Success..", Toast.LENGTH_SHORT).show();
                             Intent intent=new Intent(Login.this,MainActivity.class);
                             intent.putExtra("MPHONE",phone);

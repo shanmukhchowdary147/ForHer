@@ -1,4 +1,5 @@
 package com.example.locationapp;
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -57,6 +58,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import io.paperdb.Paper;
+
 public class MainActivity extends AppCompatActivity {
 
     Button btlocation, lgot;
@@ -94,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
         txtvw1 = findViewById(R.id.txtvw_1);
         txtvw2 = findViewById(R.id.txtvw_2);
         txtprof=findViewById(R.id.textProfile);
+        lgot=findViewById(R.id.logout);
 
         Bundle bundle=getIntent().getExtras();
         _MPhone=bundle.getString("MPHONE");
@@ -114,8 +118,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-//        lgot = findViewById(R.id.lgout);
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -142,14 +144,14 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-//        lgot.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                FirebaseAuth.getInstance().signOut();
-//                Toast.makeText(MainActivity.this, "Logged Out Successfully", Toast.LENGTH_SHORT).show();
-//                startActivity(new Intent(MainActivity.this, MainActivity.class));
-//            }
-//        });
+        lgot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Paper.book().destroy();
+                Toast.makeText(MainActivity.this, "Logged Out Successfully", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(MainActivity.this, Login.class));
+            }
+        });
 
 
 
@@ -334,6 +336,7 @@ public class MainActivity extends AppCompatActivity {
                 sysmanage.sendTextMessage(number1, null, message, null, null);
                 sysmanage.sendTextMessage(number2, null, message, null, null);
                 StoreReqInfo();
+                android.os.Process.killProcess(android.os.Process.myPid());
             }
         });
 
@@ -407,5 +410,32 @@ public class MainActivity extends AppCompatActivity {
                 });
 
 
+    }
+    @Override
+    public void onBackPressed(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+        // Set a title for alert dialog
+        builder.setTitle("Select your answer.");
+
+        // Ask the final question
+        builder.setMessage("Do you want to Logout?");
+
+        // Set the alert dialog yes button click listener
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(new Intent(getApplicationContext() ,Login.class));
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        // Display the alert dialog on interface
+        dialog.show();
     }
 }

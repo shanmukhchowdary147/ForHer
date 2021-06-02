@@ -15,6 +15,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class search extends AppCompatActivity {
 
@@ -49,6 +50,7 @@ public class search extends AppCompatActivity {
                         for (DataSnapshot ds : dataSnapshot.getChildren())
                         {
                             list.add(ds.getValue(Requests.class));
+                            Collections.reverse(list);
                         }
 
 
