@@ -1,11 +1,13 @@
 package com.example.locationapp;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,18 +19,26 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 
 public class EditProfile extends AppCompatActivity
 {
 
     private static final String TAG ="Shannukk" ;
+    private ImageView eProf;
+
     private Button cancel;
 
     EditText ProfileFullName, ProfileEmailAddress, ProfilePassword,ProfilePhone1,ProfilePhone2 ;
 
     public String _Name,_Email,_Password,_Phone,_Phone1,_Phone2;
     DatabaseReference reference;
+    private static final int PICK_FILE=1;
+    private Uri ImageUri;
+    StorageReference Folder;
+    String ImagePath;
 
 
     @Override
@@ -45,6 +55,7 @@ public class EditProfile extends AppCompatActivity
         ProfileEmailAddress = findViewById(R.id.profileEmailAddress) ;
         ProfilePassword = findViewById(R.id.profilePassword) ;
         cancel=(Button)findViewById(R.id.cancel);
+        eProf=(ImageView)findViewById(R.id.EditProfileImg);
 
 
         Bundle bundle=getIntent().getExtras();
@@ -63,12 +74,14 @@ public class EditProfile extends AppCompatActivity
                     String _Pass=userData.getPassword();
                     String _Ph1=userData.getPhone1();
                     String _Ph2=userData.getPhone2();
+                    String imgU=userData.getProfilePic();
 
                     ProfileFullName.setText(_N);
                     ProfileEmailAddress.setText(_Em);
                     ProfilePassword.setText(_Pass);
                     ProfilePhone1.setText(_Ph1);
                     ProfilePhone2.setText(_Ph2);
+                    Picasso.get().load(imgU).into(eProf);
                     SendData(_N,_Em,_Pass,_Ph1,_Ph2);
 
                 }

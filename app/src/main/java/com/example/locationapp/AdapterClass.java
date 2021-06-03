@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.locationapp.Model.Requests;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -39,11 +40,11 @@ public class AdapterClass extends RecyclerView.Adapter<com.example.locationapp.A
         String latLongt=list.get(i).getLatitude()+" "+list.get(i).getLongitude();
         Log.i(TAG,latLongt);
         myViewHolder.title.setText(list.get(i).getName());
-        myViewHolder.additionalInfo.setText(latLongt);
-        myViewHolder.contactNumber.setText(list.get(i).getPhone());
-        myViewHolder.days.setText(list.get(i).getDate());
-        myViewHolder.cost.setText(list.get(i).getTime());
-//        Picasso.get().load(list.get(i).getImage()).into(myViewHolder.image);
+        myViewHolder.additionalInfo.setText("Latitude and Longitude :- "+latLongt);
+        myViewHolder.contactNumber.setText("Contact Number :- "+list.get(i).getPhone());
+        myViewHolder.days.setText("Date :- "+list.get(i).getDate());
+        myViewHolder.cost.setText("Time :- "+list.get(i).getTime());
+        Picasso.get().load(list.get(i).getImage()).into(myViewHolder.image);
 
 
     }
@@ -73,7 +74,7 @@ public class AdapterClass extends RecyclerView.Adapter<com.example.locationapp.A
             contactNumber=itemView.findViewById(R.id.Equip_CNumber);
             cost=itemView.findViewById(R.id.Equip_cost);
             days=itemView.findViewById(R.id.Equip_days);
-//            image=(ImageView)itemView.findViewById(R.id.Equip_image);
+            image=(ImageView)itemView.findViewById(R.id.rProfileImg);
 
         }
     }

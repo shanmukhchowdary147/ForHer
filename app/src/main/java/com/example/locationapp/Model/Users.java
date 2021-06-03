@@ -1,18 +1,18 @@
 package com.example.locationapp.Model;
 
 public class Users {
-    public String name,phone,password,email, image, phone1,phone2 ;
+    public String name,phone,password,email, profilePic, phone1,phone2 ;
 
     public Users()
     {
 
     }
 
-    public Users(String name, String phone, String password, String email, String image, String phone1,String phone2) {
+    public Users(String name, String phone, String password, String email, String profilePic, String phone1,String phone2) {
         this.name = name;
         this.phone = phone;
         this.password = password;
-        this.image = image;
+        this.profilePic = profilePic;
         this.phone1 = phone1;
         this.phone2 = phone2;
         this.email=email;
@@ -58,12 +58,12 @@ public class Users {
         this.password = password;
     }
 
-    public String getImage() {
-        return image;
+    public String getProfilePic() {
+        return profilePic;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setProfilePic(String profilePic) {
+        this.profilePic = profilePic;
     }
 
 

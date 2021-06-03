@@ -1,5 +1,4 @@
 package com.example.locationapp;
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,11 +15,8 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
@@ -28,35 +24,28 @@ import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.locationapp.Model.Users;
-import com.google.android.gms.common.data.DataHolder;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
 
 import io.paperdb.Paper;
 
@@ -66,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
     CardView EditProf;
     TextView txtvw1, txtvw2, txtprof, txtvw4, txtvw5, txtvw6;
     FusedLocationProviderClient mFusedLocationClient;
-    String _MName,_MPhone,_MPhone1,_MPhone2,saveCurrentDate,saveCurrentTime,address;
+    String _MName,_MPhone,_MPhone1,_MPhone2,saveCurrentDate,saveCurrentTime,address, imageUri;
     String lat,longt;
     private SensorManager smm;
     String ggloa;
@@ -78,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
     private String ReqRandomKey;
     private static final String TAG ="Shannuxy";
     int PERMISSION_ID = 44;
+    private ImageView mProfile;
 
 
     @Override
@@ -98,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
         txtvw2 = findViewById(R.id.txtvw_2);
         txtprof=findViewById(R.id.textProfile);
         lgot=findViewById(R.id.logout);
+        mProfile=(ImageView)findViewById(R.id.mProf);
 
         Bundle bundle=getIntent().getExtras();
         _MPhone=bundle.getString("MPHONE");
@@ -110,7 +101,10 @@ public class MainActivity extends AppCompatActivity {
                     _MName=userData.getName();
                     _MPhone1=userData.getPhone1();
                     _MPhone2=userData.getPhone2();
+                    imageUri=userData.getProfilePic();
                     txtprof.setText(_MName);
+                    Log.i(TAG,imageUri);
+                    Picasso.get().load(imageUri).into(mProfile);
                 }
             }
             @Override
@@ -153,21 +147,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
     }
     @SuppressLint("MissingPermission")
     private void getLastLocation() {
         // check if permissions are given
         if (checkPermissions()) {
-
-            // check if location is enabled
             if (isLocationEnabled()) {
-
-                // getting last
-                // location from
-                // FusedLocationClient
-                // object
                 mFusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
                     @Override
                     public void onComplete(@NonNull Task<Location> task) {
@@ -191,8 +176,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         } else {
-            // if permissions aren't available,
-            // request for permissions
             requestPermissions();
         }
         smm = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -206,16 +189,12 @@ public class MainActivity extends AppCompatActivity {
     @SuppressLint("MissingPermission")
     private void requestNewLocationData() {
 
-        // Initializing LocationRequest
-        // object with appropriate methods
         LocationRequest mLocationRequest = new LocationRequest();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setInterval(5);
         mLocationRequest.setFastestInterval(0);
         mLocationRequest.setNumUpdates(1);
 
-        // setting LocationRequest
-        // on FusedLocationClient
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
     }
@@ -238,27 +217,19 @@ public class MainActivity extends AppCompatActivity {
     private boolean checkPermissions() {
         return ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
 
-        // If we want background location
-        // on Android 10.0 and higher,
-        // use:
-        // ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED
     }
 
-    // method to request for permissions
     private void requestPermissions() {
         ActivityCompat.requestPermissions(this, new String[]{
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_ID);
     }
 
-    // method to check
-    // if location is enabled
     private boolean isLocationEnabled() {
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
 
-    // If everything is alright then
     @Override
     public void
     onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -279,9 +250,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-
-
     private final SensorEventListener sensorListener = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent sensorEvent) {
@@ -295,13 +263,10 @@ public class MainActivity extends AppCompatActivity {
             float delta = acelVal - acelLast;
             shake = shake * 0.9f + delta;
             if (shake > 30) {
-
                 Toast toast = Toast.makeText(getApplicationContext(),
                         "Do not Shake Me" + shake, Toast.LENGTH_SHORT);
                 toast.show();
                 sendSMS(ggloa);
-
-
             }
         }
 
@@ -318,37 +283,23 @@ public class MainActivity extends AppCompatActivity {
         final String number2 = _MPhone2;
 
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-
-        // Set a title for alert dialog
         builder.setTitle("Select your answer.");
-
-        // Ask the final question
         builder.setMessage("Are you sure to Send Location?");
-
-        // Set the alert dialog yes button click listener
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // Do something when user clicked the Yes button
-                // Set the TextView visibility GONE
-
                 SmsManager sysmanage = SmsManager.getDefault();
                 sysmanage.sendTextMessage(number1, null, message, null, null);
                 sysmanage.sendTextMessage(number2, null, message, null, null);
                 StoreReqInfo();
-                android.os.Process.killProcess(android.os.Process.myPid());
             }
         });
-
-        // Set the alert dialog no button click listener
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
             }
         });
-
         AlertDialog dialog = builder.create();
-        // Display the alert dialog on interface
         dialog.show();
     }
 
@@ -364,21 +315,6 @@ public class MainActivity extends AppCompatActivity {
         ReqRandomKey = saveCurrentDate + saveCurrentTime;
 
         SaveReqInfoTodatabase();
-
-//        final StorageReference file_name=Folder.child("image"+ImageUri.getLastPathSegment()+ EquipRandomKey +".jpg");
-//        file_name.putFile(ImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//            @Override
-//            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                file_name.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-//                    @Override
-//                    public void onSuccess(Uri uri) {
-//                        ImagePath=String.valueOf(uri);
-//                        SaveEquipInfoTodatabase();
-//                    }
-//                });
-//
-//            }
-//        });
     }
 
     private void SaveReqInfoTodatabase() {
@@ -386,8 +322,8 @@ public class MainActivity extends AppCompatActivity {
         Reqmap.put("Eid",ReqRandomKey);
         Reqmap.put("date",saveCurrentDate);
         Reqmap.put("time",saveCurrentTime);
-//        Reqmap.put("image",ImagePath);
         Reqmap.put("name",_MName);
+        Reqmap.put("image",imageUri);
         Reqmap.put("phone",_MPhone);
         Reqmap.put("latitude",lat);
         Reqmap.put("longitude",longt);

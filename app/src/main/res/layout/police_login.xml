@@ -15,10 +15,11 @@
         android:layout_marginTop="50dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="400dp"
-        android:ems="10"
+        android:drawableLeft="@drawable/ic_baseline_email_24"
 
+        android:ems="10"
         android:fontFamily="@font/belgrano"
-        android:hint="Email"
+        android:hint="  UserID"
         android:inputType="textEmailAddress"
         android:padding="10dp"
         android:textColor="#070707"
@@ -36,49 +37,45 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="35dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="50dp"
-        android:ems="10"
+        android:drawableLeft="@drawable/ic_baseline_security_24"
 
+        android:ems="10"
         android:fontFamily="@font/belgrano"
-        android:hint="Password"
+        android:hint="  Password"
         android:inputType="textPassword"
         android:padding="10dp"
         android:textColor="#050505"
         android:textColorHint="#050505"
         android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/ploginBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pEmail" />
 
     <Button
         android:id="@+id/ploginBtn"
-        android:layout_width="208dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="70dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="70dp"
         android:background="@color/btColor"
         android:fontFamily="@font/averia_libre_bold"
         android:text="Login"
         android:textColor="@color/white"
         android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pPassword" />
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:layout_marginBottom="70dp"
+        android:layout_marginBottom="244dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ploginBtn" />
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/textView6"

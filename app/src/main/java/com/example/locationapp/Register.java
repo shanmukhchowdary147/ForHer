@@ -2,12 +2,14 @@ package com.example.locationapp;
 
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -15,6 +17,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,7 +32,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,8 +50,11 @@ public class Register extends AppCompatActivity {
     ProgressBar progressBar;
     private static final String TAG ="Shannu" ;
     private static final String TAG1 ="Shannu2";
-
-    String userID;
+    private ImageView profilePic;
+    private static final int PICK_FILE=1;
+    Uri ImageUri;
+    StorageReference Folder;
+    String ImagePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -59,10 +70,15 @@ public class Register extends AppCompatActivity {
         mRegisterBtn= (Button)findViewById(R.id.registerBtn);
         mLoginBtn   = (Button) findViewById(R.id.signin);
         pol   = (Button) findViewById(R.id.pol_sig);
+        profilePic=findViewById(R.id.profile_pic);
 
+        profilePic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                choosePictures();
+            }
+        });
 
-
-        //Paper.init(this);
 
 
         progressBar = findViewById(R.id.progressBar);
@@ -92,6 +108,23 @@ public class Register extends AppCompatActivity {
         });
     }
 
+    private void choosePictures() {
+        Intent intent=new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        startActivityForResult(intent,PICK_FILE);
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode==1 && resultCode==RESULT_OK && data!=null )
+        {
+            ImageUri= data.getData();
+            Folder= FirebaseStorage.getInstance().getReference().child("Profile Photos");
+            profilePic.setImageURI(ImageUri);
+            CreateAcc();
+        }
+    }
+
     private void CreateAcc() {
         String name=InFullName.getText().toString();
         String email=InEmail.getText().toString();
@@ -99,6 +132,30 @@ public class Register extends AppCompatActivity {
         String phone1=InPhone1.getText().toString();
         String phone2=InPhone2.getText().toString();
         String password=InPassword.getText().toString();
+        Calendar calendar = Calendar.getInstance();
+
+        SimpleDateFormat currentDate = new SimpleDateFormat("MMM dd, yyyy");
+        String saveCurrentDate = currentDate.format(calendar.getTime());
+
+        SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss a");
+        String saveCurrentTime = currentTime.format(calendar.getTime());
+
+        String randm = saveCurrentDate + saveCurrentTime;
+
+        final StorageReference file_name=Folder.child("image"+ImageUri.getLastPathSegment()+randm +".jpg");
+
+        file_name.putFile(ImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                file_name.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        ImagePath=String.valueOf(uri);
+                    }
+                });
+
+            }
+        });
 
         if (TextUtils.isEmpty(name))
         {
@@ -130,12 +187,14 @@ public class Register extends AppCompatActivity {
         else
         {
             progressBar.setVisibility(View.VISIBLE);
-            ValidatePhoneNumber(name,phone,email,password,phone1,phone2);
+            ValidatePhoneNumber(name,phone,email,password,phone1,phone2,ImagePath);
         }
 
     }
 
-    private void ValidatePhoneNumber(final String name, final String phone, final String email, final String password ,final String phone1,final String phone2) {
+    private void ValidatePhoneNumber(final String name, final String phone, final String email, final String password ,final String phone1,final String phone2, final String ImagePath) {
+
+
         final DatabaseReference RootRef;
         RootRef= FirebaseDatabase.getInstance().getReference();
 
@@ -154,6 +213,7 @@ public class Register extends AppCompatActivity {
                     userdataMap.put("phone",phone);
                     userdataMap.put("phone1",phone1);
                     userdataMap.put("phone2",phone2);
+                    userdataMap.put("profilePic",ImagePath);
 
                     RootRef.child("Users").child(phone).updateChildren(userdataMap)
                             .addOnCompleteListener(new OnCompleteListener<Void>() {

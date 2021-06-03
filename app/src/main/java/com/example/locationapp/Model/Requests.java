@@ -1,4 +1,4 @@
-package com.example.locationapp;
+package com.example.locationapp.Model;
 
 public class Requests {
     private String name,phone,latitude,longitude,address,date,time,image;
@@ -14,7 +14,7 @@ public class Requests {
         this.address = address;
         this.date = date;
         this.time=time;
-//        this.image=image;
+        this.image=image;
     }
 
     public String getName() {
@@ -70,11 +70,11 @@ public class Requests {
         this.time = time;
     }
 
-//    public String getImage() {
-//        return image;
-//    }
+    public String getImage() {
+        return image;
+    }
 
-//    public void setImage(String image) {
-//        this.image = image;
-//    }
+    public void setImage(String image) {
+        this.image = image;
+    }
 }

@@ -14,7 +14,7 @@
         android:layout_marginStart="16dp"
 
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="544dp"
+        android:layout_marginBottom="500dp"
 
         android:ems="10"
         android:fontFamily="@font/belgrano"
@@ -99,7 +99,7 @@
 
         android:ems="10"
         android:fontFamily="@font/belgrano"
-        android:hint="Enter Your first Guardians Phone number"
+        android:hint="First Guardians Phone number"
         android:inputType="textPhonetic"
         android:padding="10dp"
         android:textColor="#070707"
@@ -119,7 +119,7 @@
 
         android:ems="10"
         android:fontFamily="@font/belgrano"
-        android:hint="Enter Your Second Guardians Phone number"
+        android:hint="Second Guardians Phone number"
         android:inputType="textPhonetic"
         android:padding="10dp"
         android:textColor="#070707"
@@ -135,7 +135,7 @@
         android:layout_width="208dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="70dp"
-        android:layout_marginTop="144dp"
+        android:layout_marginTop="156dp"
         android:layout_marginEnd="70dp"
 
         android:background="@color/btColor"
@@ -153,29 +153,12 @@
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="72dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="91dp"
-        android:layout_marginEnd="100dp"
-        android:layout_marginBottom="57dp"
-        android:fontFamily="@font/averia_libre_bold"
-        android:text="USER SIGNUP"
-        android:textColor="@color/btColor"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/fullName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/pol_sig"
@@ -201,5 +184,32 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/pol_sig"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cEditProfile"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_margin="10dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="100dp"
+        android:layout_weight="1"
+        app:cardCornerRadius="200dp"
+        app:cardElevation="15dp"
+        app:cardMaxElevation="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/profile_pic"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+
+            app:srcCompat="@drawable/unnamed" />
+
+    </androidx.cardview.widget.CardView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
