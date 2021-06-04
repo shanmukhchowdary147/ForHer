@@ -1,9 +1,11 @@
 package com.example.locationapp;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -95,5 +97,33 @@ public class search extends AppCompatActivity {
         AdapterClass adapterClass=new AdapterClass(myList);
         recyclerView.setAdapter(adapterClass);
 
+    }
+
+    @Override
+    public void onBackPressed(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(search.this);
+
+        // Set a title for alert dialog
+        builder.setTitle("Select your answer.");
+
+        // Ask the final question
+        builder.setMessage("Do you want to exit ForHer ?");
+
+        // Set the alert dialog yes button click listener
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finishAffinity();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        // Display the alert dialog on interface
+        dialog.show();
     }
 }

@@ -39,4 +39,8 @@ public class police_Login extends AppCompatActivity {
             }
         });
     }
+    @Override
+    public void onBackPressed(){
+        startActivity(new Intent(getApplicationContext(),Login.class));
+    }
 }

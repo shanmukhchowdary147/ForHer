@@ -3,10 +3,12 @@ package com.example.locationapp;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -250,6 +252,11 @@ public class Register extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onBackPressed(){
+        startActivity(new Intent(getApplicationContext(),Login.class));
     }
 
 

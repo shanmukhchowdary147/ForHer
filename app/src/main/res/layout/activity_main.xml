@@ -1,26 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
     tools:context=".MainActivity">
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/my_drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:ignore="HardcodedText">
+        <com.google.android.material.navigation.NavigationView
+            android:layout_width="wrap_content"
+            android:id="@+id/nav_menu"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            app:menu="@menu/navigation_menu"
+            android:background="@color/btColor"
+            app:itemTextColor="@color/white" />
+    </androidx.drawerlayout.widget.DrawerLayout>
 
     <TextView
         android:id="@+id/textProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="166dp"
-        android:layout_marginTop="25dp"
         android:layout_marginEnd="173dp"
+        android:layout_marginBottom="40dp"
         android:fontFamily="@font/averia_libre_bold"
         android:text="PROFILE"
         android:textColor="@color/btColor"
         android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/txtvw_1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cEditProfile" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cEditProfile"
@@ -28,15 +43,15 @@
         android:layout_height="200dp"
         android:layout_margin="10dp"
         android:layout_marginStart="100dp"
-        android:layout_marginTop="66dp"
         android:layout_marginEnd="100dp"
+        android:layout_marginBottom="30dp"
         android:layout_weight="1"
         app:cardCornerRadius="200dp"
         app:cardElevation="15dp"
         app:cardMaxElevation="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/textProfile"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logout">
+        app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
             android:id="@+id/mProf"
@@ -56,6 +71,7 @@
         android:layout_marginTop="448dp"
         android:layout_marginEnd="18dp"
         android:fontFamily="@font/belgrano"
+        android:gravity="center_horizontal"
         android:text="TextView"
         android:textColor="#040404"
         app:layout_constraintEnd_toEndOf="parent"
@@ -71,6 +87,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="18dp"
         android:fontFamily="@font/belgrano"
+        android:gravity="center_horizontal"
         android:text="TextView"
         android:textColor="#101010"
         app:layout_constraintEnd_toEndOf="parent"
@@ -88,18 +105,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/logout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="150dp"
-        android:layout_marginTop="52dp"
-        android:layout_marginEnd="173dp"
-        android:text="Button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

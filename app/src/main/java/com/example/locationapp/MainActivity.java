@@ -1,9 +1,11 @@
 package com.example.locationapp;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -22,6 +24,7 @@ import android.os.Looper;
 import android.provider.Settings;
 import android.telephony.SmsManager;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -36,6 +39,8 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.internal.NavigationMenu;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -59,6 +64,10 @@ public class MainActivity extends AppCompatActivity {
     String lat,longt;
     private SensorManager smm;
     String ggloa;
+    NavigationView nav;
+
+    public DrawerLayout drawerLayout;
+    public ActionBarDrawerToggle actionBarDrawerToggle;
 
     private float acelVal;
     private float acelLast;
@@ -87,11 +96,40 @@ public class MainActivity extends AppCompatActivity {
         txtvw1 = findViewById(R.id.txtvw_1);
         txtvw2 = findViewById(R.id.txtvw_2);
         txtprof=findViewById(R.id.textProfile);
-        lgot=findViewById(R.id.logout);
         mProfile=(ImageView)findViewById(R.id.mProf);
+        nav=(NavigationView) findViewById(R.id.nav_menu);
 
         Bundle bundle=getIntent().getExtras();
         _MPhone=bundle.getString("MPHONE");
+
+
+
+        drawerLayout = findViewById(R.id.my_drawer_layout);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
+
+        // pass the Open and Close toggle for the drawer layout listener
+        // to toggle the button
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+
+        // to make the Navigation drawer icon always appear on the action bar
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        nav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.nav_logout:
+                        Paper.book().destroy();
+                        startActivity(new Intent(getApplicationContext(),Login.class));
+                        break;
+                }
+                return true;
+            }
+        });
+
+
+
 
         RootRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -138,15 +176,17 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        lgot.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Paper.book().destroy();
-                Toast.makeText(MainActivity.this, "Logged Out Successfully", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(MainActivity.this, Login.class));
-            }
-        });
 
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        if (actionBarDrawerToggle.onOptionsItemSelected(item))
+        {
+            return true;
+
+        }
+        return super.onOptionsItemSelected(item);
     }
     @SuppressLint("MissingPermission")
     private void getLastLocation() {
@@ -162,10 +202,13 @@ public class MainActivity extends AppCompatActivity {
                         } else {
                             txtvw1.setText("Latitude :- "+ location.getLatitude() + "");
                             txtvw2.setText("Longitude :- "+ location.getLongitude() + "");
+                            double x=location.getAltitude();
+                            String y=String.valueOf(x);
+                            Log.i(TAG,y);
                             lat=String.valueOf(location.getLatitude());
                             longt=String.valueOf(location.getLongitude());
                             address="K";
-                            ggloa=lat+" "+longt;
+                            ggloa="I am at Location   "+lat+" "+longt;
 
                         }
                     }
@@ -355,13 +398,13 @@ public class MainActivity extends AppCompatActivity {
         builder.setTitle("Select your answer.");
 
         // Ask the final question
-        builder.setMessage("Do you want to Logout?");
+        builder.setMessage("Do you want to exit ForHer ?");
 
         // Set the alert dialog yes button click listener
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                startActivity(new Intent(getApplicationContext() ,Login.class));
+                finishAffinity();
             }
         });
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
