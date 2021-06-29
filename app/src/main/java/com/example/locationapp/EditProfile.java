@@ -75,6 +75,7 @@ public class EditProfile extends AppCompatActivity
                     String _Ph1=userData.getPhone1();
                     String _Ph2=userData.getPhone2();
                     String imgU=userData.getProfilePic();
+                    Log.i(TAG,imgU);
 
                     ProfileFullName.setText(_N);
                     ProfileEmailAddress.setText(_Em);
@@ -117,18 +118,20 @@ public class EditProfile extends AppCompatActivity
     {
         if (isNameChanged() || isPasswordChanged() || isEmailChanged() || isPhone1Changed() || isPhone2Changed())
         {
-            Intent intent2=new Intent(EditProfile.this,MainActivity.class);
-            intent2.putExtra("MPHONE",_Phone);
-            startActivity(intent2);
+            main_act();
             Toast.makeText(this, "Information Updated", Toast.LENGTH_SHORT).show();
         }
         else{
-            Intent intent=new Intent(EditProfile.this,MainActivity.class);
-            intent.putExtra("MPHONE",_Phone);
-            startActivity(intent);
+            main_act();
             Toast.makeText(this, "Data Cannot be Updated!!", Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    private void main_act() {
+        Intent intent2=new Intent(EditProfile.this,MainActivity.class);
+        intent2.putExtra("MPHONE",_Phone);
+        startActivity(intent2);
     }
 
     private boolean isPasswordChanged() {
@@ -202,7 +205,8 @@ public class EditProfile extends AppCompatActivity
     @Override
     public void onBackPressed()
     {
-        startActivity(new Intent(getApplicationContext(),MainActivity.class));
+        main_act();
+
     }
 
 

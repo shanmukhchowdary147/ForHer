@@ -123,6 +123,8 @@ public class MainActivity extends AppCompatActivity {
                         Paper.book().destroy();
                         startActivity(new Intent(getApplicationContext(),Login.class));
                         break;
+                    case R.id.nav_account:
+                        edit();
                 }
                 return true;
             }
@@ -156,9 +158,7 @@ public class MainActivity extends AppCompatActivity {
         EditProf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent2=new Intent(MainActivity.this,EditProfile.class);
-                intent2.putExtra("PHONE",_MPhone);
-                startActivity(intent2);
+                edit();
             }
         });
 
@@ -178,6 +178,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+    private void edit() {
+        Intent intent2=new Intent(MainActivity.this,EditProfile.class);
+        intent2.putExtra("PHONE",_MPhone);
+        startActivity(intent2);
+    }
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
@@ -321,7 +328,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void sendSMS(String messagegg) {
 
-        String message = messagegg;
+        String message = "Emergency!! I'm at location : " + messagegg;
         final String number1 = _MPhone1;
         final String number2 = _MPhone2;
 
