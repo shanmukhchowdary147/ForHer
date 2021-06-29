@@ -215,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
                             lat=String.valueOf(location.getLatitude());
                             longt=String.valueOf(location.getLongitude());
                             address="K";
-                            ggloa="I am at Location   "+lat+" "+longt;
+                            ggloa=lat+" "+longt;
 
                         }
                     }
