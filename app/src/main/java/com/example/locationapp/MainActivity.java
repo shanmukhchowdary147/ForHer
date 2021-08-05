@@ -17,6 +17,8 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -51,6 +53,8 @@ import com.squareup.picasso.Picasso;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 
 import io.paperdb.Paper;
 
@@ -58,9 +62,10 @@ public class MainActivity extends AppCompatActivity {
 
     Button btlocation, lgot;
     CardView EditProf;
-    TextView txtvw1, txtvw2, txtprof, txtvw4, txtvw5, txtvw6;
+    TextView txtvw1, txtvw2, txtprof,adrss,ext;
     FusedLocationProviderClient mFusedLocationClient;
     String _MName,_MPhone,_MPhone1,_MPhone2,saveCurrentDate,saveCurrentTime,address, imageUri;
+    String extmsg="";
     String lat,longt;
     private SensorManager smm;
     String ggloa;
@@ -95,6 +100,8 @@ public class MainActivity extends AppCompatActivity {
         EditProf=findViewById(R.id.cEditProfile);
         txtvw1 = findViewById(R.id.txtvw_1);
         txtvw2 = findViewById(R.id.txtvw_2);
+//        adrss= findViewById(R.id.adrs);
+        ext=findViewById(R.id.ext);
         txtprof=findViewById(R.id.textProfile);
         mProfile=(ImageView)findViewById(R.id.mProf);
         nav=(NavigationView) findViewById(R.id.nav_menu);
@@ -130,9 +137,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
-
         RootRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -142,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
                     _MPhone1=userData.getPhone1();
                     _MPhone2=userData.getPhone2();
                     imageUri=userData.getProfilePic();
-                    txtprof.setText(_MName);
+                    txtprof.setText("Hello "+_MName+" 👋");
                     Log.i(TAG,imageUri);
                     Picasso.get().load(imageUri).into(mProfile);
                 }
@@ -167,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (ActivityCompat.checkSelfPermission(MainActivity.this,
                         Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-
+                    extmsg=ext.getText().toString();
                     sendSMS(ggloa);
 
                 } else {
@@ -207,15 +211,17 @@ public class MainActivity extends AppCompatActivity {
                         if (location == null) {
                             requestNewLocationData();
                         } else {
-                            txtvw1.setText("Latitude :- "+ location.getLatitude() + "");
-                            txtvw2.setText("Longitude :- "+ location.getLongitude() + "");
+                            double latitude=location.getLatitude();
+                            double longitude=location.getLongitude();
+                            txtvw1.setText("Latitude :- "+ latitude + "");
+                            txtvw2.setText("Longitude :- "+ longitude + "");
+                            lat=String.valueOf(latitude);
+                            longt=String.valueOf(longitude);
+                            getCompleteAddressString(latitude,longitude);
                             double x=location.getAltitude();
                             String y=String.valueOf(x);
-                            Log.i(TAG,y);
-                            lat=String.valueOf(location.getLatitude());
-                            longt=String.valueOf(location.getLongitude());
-                            address="K";
-                            ggloa=lat+" "+longt;
+//                            Log.i(TAG,"address"+ address);
+                            ggloa=address+"  latitude:"+lat+"  longitude:"+longt;
 
                         }
                     }
@@ -254,12 +260,15 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onLocationResult(LocationResult locationResult) {
             Location mLastLocation = locationResult.getLastLocation();
-            txtvw1.setText("Latitude :- " + mLastLocation.getLatitude() + "");
-            txtvw2.setText("Longitude :- " + mLastLocation.getLongitude() + "");
-            lat=String.valueOf(mLastLocation.getLatitude());
-            longt=String.valueOf(mLastLocation.getLongitude());
-            address="K";
-            ggloa=lat+" "+longt;
+            double latitude=mLastLocation.getLatitude();
+            double longitude=mLastLocation.getLongitude();
+            txtvw1.setText("Latitude :- " + latitude + "");
+            txtvw2.setText("Longitude :- " + longitude + "");
+            lat=String.valueOf(latitude);
+            longt=String.valueOf(longitude);
+            getCompleteAddressString(latitude,longitude);
+            Log.i(TAG, address);
+            ggloa=address+"  latitude:"+lat+"  longitude:"+longt;
         }
     };
 
@@ -300,6 +309,29 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void getCompleteAddressString(double LATITUDE, double LONGITUDE) {
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(LATITUDE, LONGITUDE, 1);
+            if (addresses != null) {
+                Address returnedAddress = addresses.get(0);
+                StringBuilder strReturnedAddress = new StringBuilder("");
+
+                for (int i = 0; i <= returnedAddress.getMaxAddressLineIndex(); i++) {
+                    strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
+                }
+                address = strReturnedAddress.toString();
+                adrss.setText("Address :- "+ address);
+                Log.i("My Current loction address", strReturnedAddress.toString());
+            } else {
+                Log.w("My Current loction address", "No Address returned!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.w("My Current loction address", "Canont get Address!");
+        }
+    }
+
     private final SensorEventListener sensorListener = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent sensorEvent) {
@@ -316,6 +348,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast toast = Toast.makeText(getApplicationContext(),
                         "Do not Shake Me" + shake, Toast.LENGTH_SHORT);
                 toast.show();
+                extmsg=ext.getText().toString();
                 sendSMS(ggloa);
             }
         }
@@ -328,7 +361,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void sendSMS(String messagegg) {
 
-        String message = "Emergency!! I'm at location : " + messagegg;
+
+
+        String message = "Emergency!! I'm at location : " + messagegg+ "  " + extmsg;
         final String number1 = _MPhone1;
         final String number2 = _MPhone2;
 
@@ -377,7 +412,10 @@ public class MainActivity extends AppCompatActivity {
         Reqmap.put("phone",_MPhone);
         Reqmap.put("latitude",lat);
         Reqmap.put("longitude",longt);
-        Reqmap.put("address",address);
+//        Reqmap.put("address",address);
+        Reqmap.put("ext",extmsg);
+
+//        Log.i(TAG, address);
 
         ReqsRef.child(ReqRandomKey).updateChildren(Reqmap)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {

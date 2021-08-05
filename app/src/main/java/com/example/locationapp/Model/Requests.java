@@ -1,12 +1,12 @@
 package com.example.locationapp.Model;
 
 public class Requests {
-    private String name,phone,latitude,longitude,address,date,time,image;
+    private String name,phone,latitude,longitude,address,date,time,image,ext;
 
     public Requests() {
     }
 
-    public Requests(String name, String phone, String latitude, String longitude, String address, String date, String time) {
+    public Requests(String name, String phone, String latitude, String longitude, String address, String date, String time, String ext) {
         this.name = name;
         this.phone = phone;
         this.latitude=latitude;
@@ -15,6 +15,7 @@ public class Requests {
         this.date = date;
         this.time=time;
         this.image=image;
+        this.ext=ext;
     }
 
     public String getName() {
@@ -76,5 +77,13 @@ public class Requests {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getExt() {
+        return ext;
+    }
+
+    public void setExt(String ext) {
+        this.ext = ext;
     }
 }

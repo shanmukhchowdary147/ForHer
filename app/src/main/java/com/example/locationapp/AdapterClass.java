@@ -40,7 +40,7 @@ public class AdapterClass extends RecyclerView.Adapter<com.example.locationapp.A
         String latLongt=list.get(i).getLatitude()+" "+list.get(i).getLongitude();
         Log.i(TAG,latLongt);
         myViewHolder.title.setText(list.get(i).getName());
-        myViewHolder.additionalInfo.setText("Latitude and Longitude :- "+latLongt);
+        myViewHolder.additionalInfo.setText(list.get(i).getExt());
         myViewHolder.contactNumber.setText("Contact Number :- "+list.get(i).getPhone());
         myViewHolder.days.setText("Date :- "+list.get(i).getDate());
         myViewHolder.cost.setText("Time :- "+list.get(i).getTime());
