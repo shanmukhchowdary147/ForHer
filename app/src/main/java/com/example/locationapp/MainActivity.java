@@ -132,6 +132,12 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.nav_account:
                         edit();
+                        break;
+                    case R.id.nav_about:
+                        Intent intent1=new Intent(MainActivity.this,About.class);
+                        intent1.putExtra("PHONEa",_MPhone);
+                        startActivity(intent1);
+                        break;
                 }
                 return true;
             }
@@ -153,7 +159,6 @@ public class MainActivity extends AppCompatActivity {
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
 

@@ -57,10 +57,9 @@ public class EditProfile extends AppCompatActivity
         cancel=(Button)findViewById(R.id.cancel);
         eProf=(ImageView)findViewById(R.id.EditProfileImg);
 
-
         Bundle bundle=getIntent().getExtras();
-
         _Phone=bundle.getString("PHONE");
+
         Log.i(TAG,_Phone);
 
 

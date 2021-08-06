@@ -17,20 +17,19 @@
         android:roundIcon="@drawable/icon1"
         android:supportsRtl="true"
         android:theme="@style/Theme.LocationApp">
-        <activity android:name=".Register">
-        </activity>
-        <activity android:name=".Login" >
+        <activity android:name=".About"></activity>
+        <activity android:name=".Register"></activity>
+        <activity android:name=".Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".EditProfile" />
         <activity android:name=".search" />
         <activity android:name=".police_Login" />
-        <activity android:name=".MainActivity">
-
-        </activity>
+        <activity android:name=".MainActivity"></activity>
 
         <meta-data
             android:name="preloaded_fonts"
