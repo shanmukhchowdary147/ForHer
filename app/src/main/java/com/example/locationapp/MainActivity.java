@@ -366,26 +366,30 @@ public class MainActivity extends AppCompatActivity {
         String message = "Emergency!! I'm at location : " + messagegg+ "  " + extmsg;
         final String number1 = _MPhone1;
         final String number2 = _MPhone2;
+        SmsManager sysmanage = SmsManager.getDefault();
+        sysmanage.sendTextMessage(number1, null, message, null, null);
+        sysmanage.sendTextMessage(number2, null, message, null, null);
+        StoreReqInfo();
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        builder.setTitle("Select your answer.");
-        builder.setMessage("Are you sure to Send Location?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                SmsManager sysmanage = SmsManager.getDefault();
-                sysmanage.sendTextMessage(number1, null, message, null, null);
-                sysmanage.sendTextMessage(number2, null, message, null, null);
-                StoreReqInfo();
-            }
-        });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
+//        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+//        builder.setTitle("Select your answer.");
+//        builder.setMessage("Are you sure to Send Location?");
+//        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                SmsManager sysmanage = SmsManager.getDefault();
+//                sysmanage.sendTextMessage(number1, null, message, null, null);
+//                sysmanage.sendTextMessage(number2, null, message, null, null);
+//                StoreReqInfo();
+//            }
+//        });
+//        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//            }
+//        });
+//        AlertDialog dialog = builder.create();
+//        dialog.show();
     }
 
     private void StoreReqInfo() {
