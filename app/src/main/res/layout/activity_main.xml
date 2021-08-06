@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start"
-            android:background="@color/btColor"
+            android:background="@color/color2"
             app:itemTextColor="@color/white"
             app:menu="@menu/navigation_menu" />
 

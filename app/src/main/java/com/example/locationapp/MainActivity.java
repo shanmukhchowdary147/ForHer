@@ -136,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_about:
                         Intent intent1=new Intent(MainActivity.this,About.class);
                         intent1.putExtra("PHONEa",_MPhone);
+                        intent1.putExtra("NAMEa",_MName);
                         startActivity(intent1);
                         break;
                 }
